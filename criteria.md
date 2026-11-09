@@ -42,65 +42,57 @@ Two things worth knowing before you pick numbers:
   a **miss**.
 
 ---
-## 1.
 
-<!-- Your criterion. It must name a number. -->
+## 1. False Positives
 
-
-
-**Why this target:**
-
-
-
----
-
-## 2.
-
-<!-- Your criterion. -->
-
-
+Out of 10 human-written samples, no more than 1 should be labeled as high-confidence AI in each trial.
 
 **Why this target:**
 
-
+Incorrectly accusing someone of using AI can be harmful. I want the system to avoid false accusations, even if it misses some AI-generated writing.
 
 ---
 
-## 3.
+## 2. Score Spread
 
-<!-- Your criterion. -->
-
-
+The average combined score for 5 AI-generated samples should be at least 0.15 higher than the average score for 5 human-written samples in each trial.
 
 **Why this target:**
 
-
+The system should show a noticeable difference between human and AI writing without requiring perfect detection.
 
 ---
 
-## 4.
+## 3. Label Coverage
 
-<!-- Your criterion. -->
-
-
+All three labels (high-confidence human, unsure, and high-confidence AI) should appear at least once when testing 10 samples in each trial.
 
 **Why this target:**
 
-
+All three labels should be reachable so the system can express uncertainty instead of always making a confident prediction.
 
 ---
 
-## 5.
+## 4. Appeal Path
 
-<!-- Your criterion. -->
-
-
+All 3 valid test appeals should successfully update the appeal status and appear in the log in each trial.
 
 **Why this target:**
 
-
+Creators should be able to challenge incorrect classifications, and the system should reliably record their appeals.
 
 ---
+
+## 5. Bad Input Handling
+
+All 3 invalid inputs (missing text, empty text, and missing creator ID) should return an error without crashing the service in each trial.
+
+**Why this target:**
+
+The system should handle common input errors without crashing or returning misleading results.
+
+---
+
 
 <!-- ─────────────────────────────────────────────────────────────────────────
      UNIT 8 — read this before you change anything above.
