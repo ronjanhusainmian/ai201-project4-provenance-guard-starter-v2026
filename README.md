@@ -39,7 +39,7 @@
 <!-- The path a submission takes, from arriving to the label a reader sees.
      Six or seven steps — this is the trace you wrote in Milestone 1. -->
 
-
+A creator submits text and their creator ID through the /submit endpoint. The service validates the input and analyzes the text using an AI detection model and a writing-style analyzer. It combines both scores to determine a final classification and confidence level, records the results in a log, and returns the label to the reader. Creators can also appeal a classification they believe is incorrect.
 
 ---
 
@@ -54,18 +54,24 @@
 ### Signal one — the model signal
 
 **What it measures:**
+The model analyzes the text using a pretrained AI detection model and produces a score indicating how likely it is to be AI-generated.
 
 **Why that might differ between human and AI writing:**
+AI-generated text may contain patterns in word choice, sentence structure, and phrasing that differ from human writing. The model learns to recognize these patterns from its training data.
 
 **What it can't see:**
+The model cannot verify who actually wrote the text or whether AI was used. It may incorrectly flag human writing as AI-generated or fail to detect AI-generated text that has been edited.
 
 ### Signal two — the style signal
 
 **What it measures:**
+The style signal analyzes measurable writing features such as sentence length, vocabulary diversity, and punctuation patterns.
 
 **Why that might differ between human and AI writing:**
+AI-generated writing may have more consistent sentence structures and word choices, while human writing may show greater variation in style.
 
 **What it can't see:**
+Writing style alone cannot determine whether a person or AI wrote the text. Human writers may naturally use consistent writing patterns, while AI-generated text can be modified to appear more varied.
 
 ### The combining rule
 
