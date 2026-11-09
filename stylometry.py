@@ -64,8 +64,17 @@ def sentence_length_spread(text: str) -> float:
     `stdev` raises on fewer than two values. Decide what that should return
     before the attack set decides for you.
     """
-    # TODO: replace this
-    return 0.0
+    lengths = [len(words(s)) for s in sentences(text)]
+
+    if len(lengths) < 2:
+        return 0.0
+
+    mean_length = statistics.mean(lengths)
+
+    if mean_length == 0:
+        return 0.0
+
+    return round(statistics.stdev(lengths) / mean_length, 4)
 
 
 def type_token_ratio(text: str) -> float:
@@ -80,8 +89,12 @@ def type_token_ratio(text: str) -> float:
     directly comparable on it, and if your test inputs vary a lot in length,
     that alone can look like a signal.
     """
-    # TODO: replace this
-    return 0.0
+    tokens = words(text)
+
+    if not tokens:
+        return 0.0
+
+    return round(len(set(tokens)) / len(tokens), 4)
 
 
 def punctuation_density(text: str) -> float:
@@ -94,8 +107,11 @@ def punctuation_density(text: str) -> float:
         more interesting than full stops, because they vary more between
         writers.
     """
-    # TODO: replace this
-    return 0.0
+    if not text:
+        return 0.0
+
+    punctuation = re.findall(r"[,;:!?—-]", text)
+    return round(len(punctuation) / len(text), 4)
 
 
 # ── Combining them ───────────────────────────────────────────────────────────
@@ -122,8 +138,23 @@ def style_signal(text: str) -> float:
     you trust it. Plain and ordinary, not formal: formal prose reads as *human*
     to signal one, and it is plain writing that gets accused.
     """
-    # TODO: replace this
-    return 0.5
+    spread = sentence_length_spread(text)
+    diversity = type_token_ratio(text)
+    punctuation = punctuation_density(text)
+
+    # Normalize each feature to a 0–1 AI-likelihood score
+    spread_score = 1.0 - min(spread / 0.8, 1.0)
+    diversity_score = 1.0 - diversity
+    punctuation_score = 1.0 - min(punctuation / 0.05, 1.0)
+
+    # Equal weight for all three writing-style features
+    score = (
+        spread_score +
+        diversity_score +
+        punctuation_score
+    ) / 3
+
+    return round(max(0.0, min(score, 1.0)), 4)
 
 
 if __name__ == "__main__":

@@ -24,6 +24,8 @@ Routes:
     GET  /health      is the service up, and is the model loaded
 """
 import detector
+import stylometry
+import scoring
 import uuid
 
 from flask import Flask, jsonify, request
@@ -226,10 +228,17 @@ def submit():
     except detector.DetectorUnavailable as exc:
         return jsonify({"error": str(exc)}), 503
 
+    style_score = stylometry.style_signal(text)
+
+    combined_score = scoring.combine_signals(
+        model_score,
+        style_score
+    )
+
     # Placeholder values until Milestones 4 and 5
-    guess = "ai" if model_score >= 0.5 else "human"
-    confidence = model_score
-    label = "Pending final scoring"
+    guess = "ai" if combined_score >= 0.5 else "human"
+    confidence = combined_score
+    label = "Pending final labeling"
 
     # Record the submission
     audit.log_decision(
@@ -237,8 +246,8 @@ def submit():
         creator_id=creator_id,
         guess=guess,
         model_score=model_score,
-        style_score=None,
-        combined_score=None,
+        style_score=style_score,
+        combined_score=combined_score,
         label=label,
         status="decided"
     )
@@ -250,7 +259,8 @@ def submit():
         "confidence": confidence,
         "label": label,
         "model_score": model_score,
-        "style_score": None
+        "style_score": style_score,
+        "combined_score": combined_score
     })
 
 

@@ -88,7 +88,7 @@ Writing style alone cannot determine whether a person or AI wrote the text. Huma
      somewhere else, say where. -->
 
 **A case where my two signals split, and what my rule does with it:**
-
+In my AI-generated test, the model signal scored 0.7079 while the style signal scored 0.4109. The signals disagreed about how likely the text was to be AI-generated. Since their difference was below 0.4, my rule used the weighted average and produced a combined score of 0.5891. This shows that the two signals can give different results for the same text. I also found that plain human writing received a combined score of 0.8065, which highlights the risk of false positives.
 
 
 ---

@@ -52,11 +52,17 @@ def combine_signals(model_score: float, style_score: float) -> float:
     The weights in config.py are placeholders. Change them, or ignore them and
     write a different rule.
     """
-    # TODO: replace this
-    return (
+    
+    if abs(model_score - style_score) > 0.4:
+        return round(min(model_score, style_score), 4)
+
+    combined = (
         config.WEIGHT_MODEL_SIGNAL * model_score
         + config.WEIGHT_STYLE_SIGNAL * style_score
     )
+
+    return round(max(0.0, min(combined, 1.0)), 4)
+
 
 
 def score_to_label(score: float) -> tuple[str, str]:
