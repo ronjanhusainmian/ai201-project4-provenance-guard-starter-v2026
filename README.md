@@ -128,13 +128,20 @@ Writing style alone cannot determine whether a person or AI wrote the text. Huma
      diagnostics. -->
 
 ```bash
-$ curl -X POST http://127.0.0.1:5000/submit \
+curl -X POST http://127.0.0.1:5000/submit \
   -H "Content-Type: application/json" \
-  -d '{"text": "...", "creator_id": "..."}'
+  -d '{"text": "Artificial intelligence is transforming the way people work and communicate. Many organizations are adopting AI systems to improve productivity and automate repetitive tasks. These technologies are becoming increasingly common across different industries.", "creator_id": "student1"}'
 ```
 
 ```json
-
+{
+  "confidence": 0.8288,
+  "content_id": "177fba70-85eb-4bb7-8552-610911ff1123",
+  "guess": "ai",
+  "label": "Pending final scoring",
+  "model_score": 0.8288,
+  "style_score": null
+}
 ```
 
 **An appeal**
@@ -152,11 +159,26 @@ $ curl -X POST http://127.0.0.1:5000/appeal \
 **What the log shows afterwards**
 
 ```bash
-$ curl "http://127.0.0.1:5000/log?limit=3"
+curl "http://127.0.0.1:5000/log?limit=3"
 ```
 
 ```json
-
+{
+  "count": 1,
+  "entries": [
+    {
+      "combined_score": null,
+      "content_id": "177fba70-85eb-4bb7-8552-610911ff1123",
+      "creator_id": "student1",
+      "guess": "ai",
+      "label": "Pending final scoring",
+      "model_score": 0.8288,
+      "status": "decided",
+      "style_score": null,
+      "timestamp": "2026-11-09T02:08:11+00:00"
+    }
+  ]
+}
 ```
 
 ---
