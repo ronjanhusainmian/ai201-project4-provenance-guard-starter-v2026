@@ -77,10 +77,14 @@ Writing style alone cannot determine whether a person or AI wrote the text. Huma
 
 <!-- Write the rule in words, then give the numbers. What happens when the two
      signals disagree? -->
-
 **The rule:**
+The system combines the model and style scores using a weighted average. When the two signals disagree significantly (difference greater than 0.4), the system uses the lower score to reduce the risk of falsely labeling human writing as AI-generated.
 
 **The numbers:**
+- Model signal weight: 0.6 (60%)
+- Style signal weight: 0.4 (40%)
+- Disagreement threshold: 0.4
+- Combined score ranges from 0 to 1, with higher scores indicating a greater likelihood of AI-generated writing.
 
 **Where it lives:** `scoring.py::combine_signals`
 
@@ -95,22 +99,15 @@ In my AI-generated test, the model signal scored 0.7079 while the style signal s
 
 ## Label Variants
 
-<!-- The exact text of all three labels, as a reader would see them, and the
-     score range each covers.
-
-     Write them for someone who has never heard the word "threshold". -->
-
 | Label | Score range | The exact text a reader sees |
 |---|---|---|
-| high-confidence human |  |  |
-| unsure |  |  |
-| high-confidence AI |  |  |
+| high-confidence human | 0.00–0.35 | This text appears more likely to have been written by a person. |
+| unsure | Above 0.35, below 0.65 | We cannot reliably determine whether this text was written by a person or AI. |
+| high-confidence AI | 0.65-1.00 | This text shows patterns associated with AI-generated writing, but this result is not definitive. |
 
 **Why I worded the "unsure" one this way:**
-<!-- It's the hardest of the three. It has to admit uncertainty without
-     sounding like an accusation, because the person reading it may well have
-     written every word themselves. -->
 
+I wanted the label to clearly communicate uncertainty without accusing the writer of using AI. Since neither signal can reliably prove authorship, the system should avoid making definitive claims.
 
 
 ---
@@ -146,38 +143,56 @@ curl -X POST http://127.0.0.1:5000/submit \
 
 **An appeal**
 
+I tested the appeal endpoint using a real `content_id` from an earlier submission.
+
+**Request:**
 ```bash
-$ curl -X POST http://127.0.0.1:5000/appeal \
-  -H "Content-Type: application/json" \
-  -d '{"content_id": "...", "reasoning": "..."}'
+curl -X POST http://127.0.0.1:5000/appeal \
+-H "Content-Type: application/json" \
+-d '{"content_id": "c49e0033-fd23-47a2-9abe-5e2bf1afa0b3", "reasoning": "I wrote this text myself and believe the classification is incorrect."}'
 ```
 
+**Response:**
 ```json
-
+{
+  "content_id": "c49e0033-fd23-47a2-9abe-5e2bf1afa0b3",
+  "message": "Your appeal has been recorded and is under review.",
+  "status": "under_review"
+}
 ```
+
+**Appeal entry:**
+```json
+{
+  "content_id": "c49e0033-fd23-47a2-9abe-5e2bf1afa0b3",
+  "creator_id": "student1",
+  "event": "appeal",
+  "reasoning": "I wrote this text myself and believe the classification is incorrect.",
+  "status": "under_review"
+}
+```
+
+**Result:** The appeal endpoint successfully recorded the appeal and set its status to under_review. The original decision remained unchanged, and both entries appeared in the audit log.
+
 
 **What the log shows afterwards**
 
+I checked the audit log using:
 ```bash
-curl "http://127.0.0.1:5000/log?limit=3"
+curl "http://127.0.0.1:5000/log?limit=2"
 ```
 
+
+**Response:**
 ```json
 {
-  "count": 1,
-  "entries": [
-    {
-      "combined_score": null,
-      "content_id": "177fba70-85eb-4bb7-8552-610911ff1123",
-      "creator_id": "student1",
-      "guess": "ai",
-      "label": "Pending final scoring",
-      "model_score": 0.8288,
-      "status": "decided",
-      "style_score": null,
-      "timestamp": "2026-11-09T02:08:11+00:00"
-    }
-  ]
+  "content_id": "c49e0033-fd23-47a2-9abe-5e2bf1afa0b3",
+  "creator_id": "student1",
+  "guess": "ai",
+  "model_score": 0.8444,
+  "style_score": 0.6392,
+  "combined_score": 0.7623,
+  "status": "decided"
 }
 ```
 
@@ -187,15 +202,15 @@ curl "http://127.0.0.1:5000/log?limit=3"
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* I used AI to help me understand the purpose of the different Python files, how their functions work, and how they interact with each other.
+- *What came back:* AI explained the code structure, the role of each function, and how data flows through the detection and scoring process.
+- *What I changed:* I used these explanations to better understand the existing code and identify where I needed to make changes.
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* I asked AI for help with Python syntax, Flask endpoints, function calls, and formatting JSON responses.
+- *What came back:* AI provided syntax examples and explained how to use the relevant functions and libraries.
+- *What I changed:* I adapted the examples to my project, tested the code using terminal commands, and made adjustments based on the results.
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 

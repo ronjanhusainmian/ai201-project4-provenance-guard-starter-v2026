@@ -235,10 +235,8 @@ def submit():
         style_score
     )
 
-    # Placeholder values until Milestones 4 and 5
-    guess = "ai" if combined_score >= 0.5 else "human"
+    guess, label = scoring.score_to_label(combined_score)
     confidence = combined_score
-    label = "Pending final labeling"
 
     # Record the submission
     audit.log_decision(
@@ -285,14 +283,45 @@ def appeal():
     to the person on the other end. It's the only thing standing between a
     wrong accusation and nothing at all.
     """
-    payload = request.get_json(silent=True) or {}
+    
+    payload = request.get_json(silent=True)
 
-    # TODO: delete this and build the route.
+    if not isinstance(payload, dict):
+        return jsonify({"error": "Invalid JSON body"}), 400
+
+    content_id = payload.get("content_id")
+    reasoning = payload.get("reasoning")
+
+    if not isinstance(content_id, str) or not content_id.strip():
+        return jsonify({"error": "Valid content_id is required"}), 400
+
+    if not isinstance(reasoning, str) or not reasoning.strip():
+        return jsonify({"error": "Appeal reasoning is required"}), 400
+
+    # Find the original submission
+    entries = audit.entries_for(content_id)
+
+    original = next(
+        (entry for entry in entries if entry.get("status") == "decided"),
+        None
+    )
+
+    if original is None:
+        return jsonify({"error": "Content ID not found"}), 404
+
+    # Record the appeal
+    audit.log_appeal(
+        content_id=content_id,
+        creator_id=original["creator_id"],
+        reasoning=reasoning
+    )
+
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /appeal isn't built yet — see the TODO in app.py.",
-        "you_sent": payload,
-    }), 501
+        "content_id": content_id,
+        "status": "under_review",
+        "message": "Your appeal has been recorded and is under review."
+    }), 200
+
 
 
 # ── Already works ─────────────────────────────────────────────────────────────
