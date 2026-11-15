@@ -248,19 +248,56 @@ A caller is identified by their IP address. This means multiple users sharing th
      `run_attacks.py --label before` produces the table. -->
 
 
+| ID | Family | Targeting | Status | Content ID | Guess | Score | Verdict |
+|---|---|---|---|---|---|---|---|
+| EV01 | evasion | signal two: typos raise word variety | 200 | `0610eabb-7a42-4ece-ba70-a9a5c6658c74` | human | 0.164 | BROKE |
+| EV02 | evasion | signal two: broken-up sentences raise length spread | 200 | `3ae20c73-9355-4c67-957d-b0074d319e7d` | unsure | 0.498 | BROKE |
+| EV03 | evasion | signal two: a pasted quotation changes the shape | 200 | `9eae34a6-a206-43fd-928d-cf1528834de6` | unsure | 0.593 | BROKE |
+| EV04 | evasion | signal one: unusual words raise perplexity | 200 | `f482a49b-43ec-4171-9ff4-3327de314fbf` | unsure | 0.601 | BROKE |
+| EV05 | evasion | both signals: heavy human editing pass | 200 | `8c0d7bb6-2975-47bb-8157-54bf595c2282` | human | 0.337 | BROKE |
+| EV06 | evasion | signal two: one very long sentence and one very short | 200 | `013f5a78-d5a4-448e-9fb1-d0614425b34a` | unsure | 0.498 | BROKE |
+| EV07 | evasion | signal two: padding with punctuation | 200 | `00efa5d5-a66d-4a83-bf66-fa7623bda1ed` | unsure | 0.570 | BROKE |
+| EV08 | evasion | signal one: text below the token window | 200 | `4874e4e2-cf50-4eb1-9b1b-5d590b872392` | unsure | 0.367 | BROKE |
+| EV09 | evasion | both: AI text with a human opening paragraph bolted on | 200 | `0200499f-d3d5-40d7-9098-f9988db5c347` | unsure | 0.612 | BROKE |
+| EV10 | evasion | signal two: repeated stanza structure | 200 | `45525d47-303b-4b7f-a1e6-461fc93f4041` | ai | 0.879 | HELD |
+| FP01 | false_positive | plain, clear human writing with no flourishes | 200 | `222c7f45-ed36-4baf-8e15-724020f1e8fa` | unsure | 0.590 | HELD |
+| FP02 | false_positive | human writing in a formal register | 200 | `c7ecd63b-c9f1-4907-86d1-fabfc59363b2` | ai | 0.703 | BROKE |
+| FP03 | false_positive | a non-native English speaker writing carefully | 200 | `13997208-77ab-4000-9aa4-eebb67488473` | ai | 0.732 | BROKE |
+| FP04 | false_positive | a student essay written to a rubric | 200 | `611261c6-ecdd-4e15-adae-35aa188f7e8a` | ai | 0.725 | BROKE |
+| FP05 | false_positive | technical documentation written by a person | 200 | `e5cfd398-d07f-4176-acac-ab90e71732f0` | ai | 0.743 | BROKE |
+| FP06 | false_positive | a person imitating a formal template | 200 | `d686b6df-0986-4c9c-ae22-24127ea03484` | ai | 0.737 | BROKE |
+| FP07 | false_positive | human writing that repeats a phrase deliberately | 200 | `c863a2cf-5666-4226-b103-24caffbaae2c` | ai | 0.730 | BROKE |
+| FP08 | false_positive | very short genuine human submission | 200 | `57ccf2a0-2067-4275-840e-a60e8cfa2479` | unsure | 0.388 | HELD |
+| PI01 | prompt_injection | instruction to ignore the check | 200 | `5fb4fa47-8d56-4d50-8878-1963d31805c8` | unsure | 0.443 | HELD |
+| PI02 | prompt_injection | instruction disguised as a system message | 200 | `ef08c798-c957-4c88-b7ad-37e8bd23d6a3` | human | 0.270 | HELD |
+| PI03 | prompt_injection | instruction wrapped in the writer's voice | 200 | `1ce7f71a-28ff-4116-8fcd-05200f50184d` | unsure | 0.571 | HELD |
+| PI04 | prompt_injection | attempt to make the label text hostile | 200 | `a4456b93-93ac-4b8f-bed9-a13791a2946c` | unsure | 0.499 | HELD |
+| PI05 | prompt_injection | attempt to inject into the audit log | 200 | `5f9f61a0-ffd2-4a37-8750-6fc5f4383bca` | unsure | 0.501 | HELD |
+
 
 **Ten audit log entries from the run**
 
 <!-- Choose entries that show the interesting failures, not the ten easiest. -->
 
 ```json
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "fbd611e1-f0b5-4857-89d2-0145c385dcf3", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "12eca590-252a-4fb0-a87d-ba870380979c", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "8d21bf09-7a8f-456e-9c99-ba97197bf9c0", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "4187adeb-7781-4d1a-9364-7ea493ace980", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "d5d0d5f5-c855-4c62-a418-cb26f52bc28f", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "549c70e5-13d0-43ff-883d-e8a24586a5b4", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "d974eb63-daae-4e2a-acfe-ac3c471cbc9e", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "content_id": "bb54385e-0ea6-43fb-a5df-58e1ee825790", "creator_id": "attacker_flood", "guess": "human", "model_score": 0.0287, "style_score": 0.6667, "combined_score": 0.0287, "label": "This text appears more likely to have been written by a person.", "status": "decided"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "creator_id": "attacker_flood", "event": "rejected", "status": "rejected", "reason": "rate_limited", "limit": "10 per 1 minute"},
+{"timestamp": "2026-11-15T22:48:35+00:00", "creator_id": "attacker_flood", "event": "rejected", "status": "rejected", "reason": "rate_limited", "limit": "10 per 1 minute"}
+
 
 ```
 
 **The single worst outcome** — the one I'd least want to explain to a writer
 whose work got caught by it:
 
-
+The worst outcome was FP03, where writing from a non-native English speaker was classified as AI-generated with a score of 0.732. This is concerning because the system could incorrectly accuse someone of using AI simply because of their writing style. It shows that the detector can produce false positives and should not be used as definitive proof of AI-generated writing.
 
 ---
 
