@@ -218,24 +218,26 @@ curl "http://127.0.0.1:5000/log?limit=2"
 
 ## Rate Limiting
 
-**My limits:** ___ per minute, ___ per day
+**My limits:** 10 per minute, 200 per day
 
 **Why those numbers and not others:**
 <!-- Think about two people: a real writer submitting their own work a few
      times an hour, and a script sending a thousand variations to map your
      thresholds. Your numbers have to be liveable for the first and hostile to
      the second. -->
+I chose 10 requests per minute because a normal user would only submit a few pieces of writing at a time. This limit allows regular users to use the service while preventing scripts from sending too many requests quickly. The 200 requests per day limit also helps prevent repeated attempts to test and bypass the detector.
 
 **What a caller counts as:** <!-- per address, or per creator_id? They fail
-differently — one script can look like a thousand callers, and one household
+<!-- differently — one script can look like a thousand callers, and one household
 can look like one. -->
+A caller is identified by their IP address. This means multiple users sharing the same IP address may share a rate limit, while someone using different IP addresses could bypass it.
 
 **The run of status codes when I pushed past it:**
 
 <!-- python run_attacks.py --flood 15 -->
 
 ```
-
+200 200 200 200 200 200 200 200 200 200 429 429 429 429 429
 ```
 
 ---
