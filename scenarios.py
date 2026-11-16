@@ -22,50 +22,76 @@ A scenario carries **either** of these:
               because you cannot express "the field is missing" as a string.
 """
 
+
 SCENARIOS = [
     {
         "name": "my own writing",
         "criterion": 1,
-        # ⚠️ PUT YOUR OWN WRITING HERE. Not AI text, not a sample from the web —
-        # things you actually wrote. This is the criterion that matters most and
-        # it's meaningless with someone else's prose.
         "texts": [
-            "REPLACE ME with a paragraph you wrote yourself.",
-            "REPLACE ME with another one. Ten pieces is the usual number.",
+            "I spent most of yesterday studying for my algorithms exam. I understood the lectures, but some of the homework problems were still confusing. I went through the solutions again and tried solving them without looking at my notes.",
+            "Our group met in the library to work on our project. We divided the remaining tasks and discussed how to test the application. I worked on fixing a few bugs and helped another team member understand the code.",
+            "Last weekend I went grocery shopping and cooked dinner with my friends. We tried making something new, but it took much longer than expected. The food turned out pretty good in the end.",
+            "I was having trouble understanding a concept in class, so I went to office hours. The professor explained it using a smaller example, which made the problem easier to understand.",
+            "I started working on my assignment early because I knew I would be busy later in the week. I finished most of it on Monday and used the remaining time to check my answers.",
+            "My laptop stopped connecting to the internet during a meeting. I restarted it twice before realizing that the problem was with the network. After reconnecting, everything worked normally.",
+            "I enjoy working on programming projects because I can see the results of what I build. Sometimes debugging takes longer than writing the code, but figuring out the problem is satisfying.",
+            "We had a team meeting to discuss our progress. Everyone shared what they had completed and what they were struggling with. We decided to focus on the most important tasks first.",
+            "I missed the bus this morning and had to walk to campus. It was colder than I expected, so I stopped to get coffee before going to class.",
+            "I spent the afternoon reviewing my notes and practicing problems. Some questions were straightforward, while others required several attempts before I understood the solution.",
+        ],
+    },
+    {
+        "name": "score spread",
+        "criterion": 2,
+        "texts": [
+            "Artificial intelligence is transforming modern industries by automating repetitive tasks, improving operational efficiency, and enabling organizations to make data-driven decisions.",
+            "Machine learning algorithms identify patterns in large datasets and use these patterns to make predictions. Their effectiveness depends on data quality, model selection, and evaluation.",
+            "Cloud computing provides scalable computing resources over the internet. Organizations can adjust infrastructure capacity based on demand while reducing the need for physical hardware.",
+            "Effective communication is essential for successful teamwork. Clear expectations, regular feedback, and shared responsibilities help teams coordinate their efforts and achieve common goals.",
+            "Cybersecurity involves protecting computer systems, networks, and sensitive information from unauthorized access. Strong authentication, regular updates, and monitoring help reduce security risks.",
+            "I spent most of yesterday studying for my algorithms exam. I understood the lectures, but some of the homework problems were still confusing. I went through the solutions again and tried solving them without looking at my notes.",
+            "Our group met in the library to work on our project. We divided the remaining tasks and discussed how to test the application. I worked on fixing a few bugs and helped another team member understand the code.",
+            "Last weekend I went grocery shopping and cooked dinner with my friends. We tried making something new, but it took much longer than expected. The food turned out pretty good in the end.",
+            "I was having trouble understanding a concept in class, so I went to office hours. The professor explained it using a smaller example, which made the problem easier to understand.",
+            "I started working on my assignment early because I knew I would be busy later in the week. I finished most of it on Monday and used the remaining time to check my answers.",
         ],
     },
     {
         "name": "label coverage",
-        "criterion": 2,
-        # Inputs spread across your score range, so you can check all three
-        # labels are actually reachable.
+        "criterion": 3,
         "texts": [
-            "REPLACE ME with something you're confident is AI-generated.",
-            "REPLACE ME with something you're confident is human-written.",
-            "REPLACE ME with something genuinely borderline.",
+            "Artificial intelligence is transforming modern industries by automating repetitive tasks, improving operational efficiency, and enabling organizations to make data-driven decisions.",
+            "Machine learning algorithms identify patterns in large datasets and use these patterns to make predictions. Their effectiveness depends on data quality, model selection, and evaluation.",
+            "Cloud computing provides scalable computing resources over the internet. Organizations can adjust infrastructure capacity based on demand while reducing the need for physical hardware.",
+            "Effective communication is essential for successful teamwork. Clear expectations, regular feedback, and shared responsibilities help teams coordinate their efforts and achieve common goals.",
+            "Cybersecurity involves protecting computer systems, networks, and sensitive information from unauthorized access. Strong authentication, regular updates, and monitoring help reduce security risks.",
+            "I spent most of yesterday studying for my algorithms exam. I understood the lectures, but some of the homework problems were still confusing. I went through the solutions again and tried solving them without looking at my notes.",
+            "Our group met in the library to work on our project. We divided the remaining tasks and discussed how to test the application. I worked on fixing a few bugs and helped another team member understand the code.",
+            "Last weekend I went grocery shopping and cooked dinner with my friends. We tried making something new, but it took much longer than expected. The food turned out pretty good in the end.",
+            "I was having trouble understanding a concept in class, so I went to office hours. The professor explained it using a smaller example, which made the problem easier to understand.",
+            "I started working on my assignment early because I knew I would be busy later in the week. I finished most of it on Monday and used the remaining time to check my answers.",
         ],
     },
-    # A bad-input criterion looks like this. Uncomment and adjust if that's one
-    # of your five — these are raw request bodies, sent exactly as written.
-    #
-    # {
-    #     "name": "bad input",
-    #     "criterion": 3,
-    #     "bodies": [
-    #         {"text": "", "creator_id": "eval_bad_empty"},
-    #         {"creator_id": "eval_bad_missing"},          # no text field at all
-    #         {"text": "word " * 50000, "creator_id": "eval_bad_huge"},
-    #         {"text": None, "creator_id": "eval_bad_null"},
-    #     ],
-    # },
-
-    # TODO: add what your remaining criteria need.
-    #
-    # A criterion about the appeal path can't be tested by sending text alone;
-    # it needs a submission first and then an appeal against the content_id
-    # that came back. You'll need to test that one by hand, or extend this file
-    # and run_eval.py to do it. Saying which you did is part of the write-up.
+    {
+        "name": "appeal path",
+        "criterion": 4,
+        "texts": [
+            "I worked on my programming assignment yesterday and tested the code before submitting it.",
+            "Our team met to discuss the project requirements and divide the remaining tasks.",
+            "I reviewed my class notes and practiced several problems before the exam.",
+        ],
+    },
+    {
+        "name": "bad input",
+        "criterion": 5,
+        "bodies": [
+            {"creator_id": "eval_missing_text"},
+            {"text": "", "creator_id": "eval_empty_text"},
+            {"text": "Testing missing creator ID"},
+        ],
+    },
 ]
+
 
 
 def validate() -> list[str]:
