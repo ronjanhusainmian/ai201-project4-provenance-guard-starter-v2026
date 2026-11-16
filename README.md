@@ -212,6 +212,11 @@ curl "http://127.0.0.1:5000/log?limit=2"
 - *What came back:* AI provided syntax examples and explained how to use the relevant functions and libraries.
 - *What I changed:* I adapted the examples to my project, tested the code using terminal commands, and made adjustments based on the results.
 
+**Moment 3**
+
+- *What I asked for:* I asked AI for help writing and debugging the Python scripts used to run the evaluation and appeal tests in Unit 8.
+- *What came back:* AI provided code examples and helped identify issues with how the scripts handled API responses and content IDs.
+- *What I changed:* I updated the scripts to use the correct content IDs returned by the API, ran the tests in the terminal, and checked that the results matched the expected behavior.
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
 ---
