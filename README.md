@@ -347,6 +347,21 @@ Example from Criterion 1 (False Positives), Trial 1:
 
      Look for a pattern. Five failures on one signal is one problem, not five. -->
 
+**1. False Positives — MISSED**
+- **Stage:** Signal scoring and label mapping.
+- **Mechanism:** 7 out of 10 human-written samples were classified as AI. The detector assigned high AI scores to human writing, causing incorrect labels.
+
+**2. Score Spread — MISSED**
+- **Stage:** Signal scoring and combining rule.
+- **Mechanism:** Human-written samples had a higher average score (0.6470) than AI-generated samples (0.5601). The signals did not distinguish the two groups correctly, resulting in poor score separation.
+
+**3. Label Coverage — MISSED**
+- **Stage:** Label mapping.
+- **Mechanism:** Only `ai` and `unsure` labels appeared. None of the samples received a `human` label because their combined scores did not fall below the required threshold.
+
+**Overall Pattern**
+
+All three misses appear related to the detection and scoring system. Human-written text frequently received high AI scores, affecting false positives, score separation, and label coverage. The appeal process and input validation worked correctly, so the main issue appears to be with classification rather than the API routes.
 
 
 ---
