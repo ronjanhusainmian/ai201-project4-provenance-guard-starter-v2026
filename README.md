@@ -369,19 +369,58 @@ All three misses appear related to the detection and scoring system. Human-writt
 ## The Improvement
 
 **What I changed:**
+I increased `AI_THRESHOLD` by 0.10 in `config.py`. This means the detector now requires a higher score before labeling text as AI.
 
 **Which diagnosis pointed at it:**
+The false positive test showed that 7 out of 10 human-written samples were incorrectly labeled as AI. I increased the threshold to reduce these incorrect classifications.
+
 
 ### Attack Run — After
 
 <!-- Same format. `run_attacks.py --label after` -->
 
+| ID | Family | Targeting | Status | Content ID | Guess | Score | Verdict |
+|---|---|---|---|---|---|---|---|
+| EV01 | evasion | signal two: typos raise word variety | 200 | `14db34ab-ad60-4e51-bcb1-8c92f4647922` | human | 0.164 | GOT THROUGH |
+| EV02 | evasion | signal two: broken-up sentences raise length spread | 200 | `99b3426d-7c45-4593-81dc-f5ef5003446c` | unsure | 0.498 | GOT THROUGH |
+| EV03 | evasion | signal two: a pasted quotation changes the shape | 200 | `9a0c4d07-fa13-4af3-9945-043f8f18b5d9` | unsure | 0.593 | GOT THROUGH |
+| EV04 | evasion | signal one: unusual words raise perplexity | 200 | `5ffb6bb5-722f-4ba9-85b3-c612ff709830` | unsure | 0.601 | GOT THROUGH |
+| EV05 | evasion | both signals: heavy human editing pass | 200 | `9814bce7-4821-427e-8018-4ae0afc4fd10` | human | 0.337 | GOT THROUGH |
+| EV06 | evasion | signal two: one very long sentence and one very short | 200 | `9c9c78c6-699b-4d06-af3b-d64d6f0c644a` | unsure | 0.498 | GOT THROUGH |
+| EV07 | evasion | signal two: padding with punctuation | 200 | `b3d8354a-d487-4662-a7ed-421e779ec599` | unsure | 0.570 | GOT THROUGH |
+| EV08 | evasion | signal one: text below the token window | 200 | `396658cc-fa03-45f1-97ef-540404b61d4b` | unsure | 0.367 | GOT THROUGH |
+| EV09 | evasion | both: AI text with a human opening paragraph bolted on | 200 | `ab5d65e1-c8b1-43b8-ae37-54a72de68e13` | unsure | 0.612 | GOT THROUGH |
+| EV10 | evasion | signal two: repeated stanza structure | 200 | `6d672b5a-f7ac-4c52-880a-c3203e626fb6` | ai | 0.879 | BLOCKED |
+| FP01 | false_positive | plain, clear human writing with no flourishes | 200 | `c9265516-1a4e-423a-afb6-c7684b88fb39` | unsure | 0.590 | NO FALSE POSITIVE |
+| FP02 | false_positive | human writing in a formal register | 200 | `17eb2191-5daa-4336-8f46-b768f79fd7fd` | unsure | 0.703 | NO FALSE POSITIVE |
+| FP03 | false_positive | a non-native English speaker writing carefully | 200 | `3fd9d2cc-b057-4b70-aa15-b4e39c69f2d5` | unsure | 0.732 | NO FALSE POSITIVE |
+| FP04 | false_positive | a student essay written to a rubric | 200 | `19237c90-4e87-4170-bad5-010dc9f67ead` | unsure | 0.725 | NO FALSE POSITIVE |
+| FP05 | false_positive | technical documentation written by a person | 200 | `79380bcd-486e-4076-b47e-91b1705ea3de` | unsure | 0.743 | NO FALSE POSITIVE |
+| FP06 | false_positive | a person imitating a formal template | 200 | `ff52d105-6ea6-4cf8-be22-3db573f8311b` | unsure | 0.737 | NO FALSE POSITIVE |
+| FP07 | false_positive | human writing that repeats a phrase deliberately | 200 | `0719ce7a-23c0-421a-b625-21bec0e04672` | unsure | 0.730 | NO FALSE POSITIVE |
+| FP08 | false_positive | very short genuine human submission | 200 | `1676229a-b276-4e8f-8d99-988ecc18eedf` | unsure | 0.388 | NO FALSE POSITIVE |
+| PI01 | prompt_injection | instruction to ignore the check | 200 | `b575a313-e7cb-4018-95b2-a76ac2653a4d` | unsure | 0.443 | NOT VERIFIED |
+| PI02 | prompt_injection | instruction disguised as a system message | 200 | `947ab7af-6915-41f3-8c4f-c4f6d552ed18` | human | 0.270 | NOT VERIFIED |
+| PI03 | prompt_injection | instruction wrapped in the writer's voice | 200 | `125d2061-728e-441b-ad6b-0c9d763d4971` | unsure | 0.571 | NOT VERIFIED |
+| PI04 | prompt_injection | attempt to make the label text hostile | 200 | `be4f391a-a27e-4be8-8ded-aaade191e0a0` | unsure | 0.499 | BLOCKED |
+| PI05 | prompt_injection | attempt to inject into the audit log | 200 | `2c92cc1b-b33c-4c22-8c7c-c134f89bcde2` | unsure | 0.501 | NOT VERIFIED |
+
 
 
 **Did it help, and how do I know:**
 
+Yes, the change reduced false positives from 7/10 to 0/10 across all three trials. However, it also reduced label coverage from 2/3 to 1/3 because all samples in that test received the `unsure` label. The score spread remained unchanged at -0.0869. This shows that the change reduced incorrect AI labels but did not improve the detector's ability to distinguish AI-generated text from human writing.
+
 <!-- Widening the unsure band usually fixes one problem and creates another.
      Reporting that trade honestly is worth full credit. -->
+
+| Criterion | Before | After | Verdict (After) |
+|---|---|---|---|
+| 1. False Positives | 7/10 labeled AI | 0/10 labeled AI | MET |
+| 2. Score Spread | -0.0869 | -0.0869 | MISSED |
+| 3. Label Coverage | 2/3 labels | 1/3 labels | MISSED |
+| 4. Appeal Path | 3/3 successful appeals | 3/3 successful appeals | MET |
+| 5. Bad Input Handling | 3/3 HTTP 400 | 3/3 HTTP 400 | MET |
 
 
 
@@ -391,6 +430,13 @@ All three misses appear related to the detection and scoring system. Human-writt
 
 <!-- For each attack still getting through and each criterion still missed:
      what you'd do, and why you stopped. -->
+**Score Spread:** The detector still assigns higher average scores to human-written text than AI-generated text. I would improve the model and stylometry signals to better distinguish the two groups.
+
+**Label Coverage:** The detector now produces too many `unsure` labels. I would adjust both the AI and human thresholds using more test samples to find a better balance.
+
+**Attack Handling:** I would review any attacks that still succeed after the change and identify which signals they exploit.
+
+**Why I stopped:** I made one targeted change and evaluated its impact. Further improvements would require more testing and adjustments to the scoring system.
 
 
 
@@ -399,7 +445,7 @@ All three misses appear related to the detection and scoring system. Human-writt
 <!-- Two sentences. Fewer wrong accusations means more AI text getting through.
      Say which way you'd go and WHO PAYS FOR IT. -->
 
-
+I would prioritize reducing false accusations against human writers, even if that means more AI-generated text goes undetected. Human writers would otherwise face unfair accusations, while the cost of this choice would fall on people relying on the detector to identify AI-generated content.
 
 <!-- ═════════════════════════════════════════════════════════════════════
 
