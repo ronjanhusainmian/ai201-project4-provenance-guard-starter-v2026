@@ -517,4 +517,5 @@ I will make the existing Flask service reproducible locally, add structured logg
 
 - Normal submission: HTTP 200, with detection scores returned.
 - Simulated timeout: HTTP 504, with a clear error message.
+- Existing system tests: Passed after adding timeout handling.
 
