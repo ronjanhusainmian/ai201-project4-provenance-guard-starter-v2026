@@ -9,3 +9,15 @@
 {"timestamp": "2026-11-18T14:17:54", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0285}
 {"timestamp": "2026-11-18T14:17:55", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0219}
 {"timestamp": "2026-11-18T14:18:06", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0002}
+{"timestamp": "2026-11-18T17:45:30", "endpoint": "/submit", "input": {"text_length": 29}, "output": {"status_code": 504}, "duration_seconds": 30.0058}
+{"timestamp": "2026-11-18T17:46:12", "endpoint": "/submit", "input": {"text_length": 29}, "output": {"status_code": 504}, "duration_seconds": 30.0057}
+{"timestamp": "2026-11-18T17:47:00", "endpoint": "/submit", "input": {"text_length": 29}, "output": {"status_code": 504}, "duration_seconds": 30.0057}
+{"timestamp": "2026-11-18T17:47:41", "endpoint": "/submit", "input": {"text_length": 33}, "output": {"status_code": 200}, "duration_seconds": 3.6169}
+{"timestamp": "2026-11-18T17:48:27", "endpoint": "/submit", "input": {"text_length": 33}, "output": {"status_code": 200}, "duration_seconds": 0.0352}
+{"timestamp": "2026-11-18T17:48:29", "endpoint": "/submit", "input": {"text_length": 33}, "output": {"status_code": 200}, "duration_seconds": 0.0254}
+{"timestamp": "2026-11-18T17:48:52", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0003}
+{"timestamp": "2026-11-18T17:48:54", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0001}
+{"timestamp": "2026-11-18T17:48:55", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0001}
+{"timestamp": "2026-11-18T17:49:03", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0001}
+{"timestamp": "2026-11-18T17:49:05", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0001}
+{"timestamp": "2026-11-18T17:49:06", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0001}

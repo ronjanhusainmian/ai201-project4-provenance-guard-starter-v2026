@@ -562,3 +562,46 @@ Average duration: 0.4701 seconds
 - **Reason:** Invalid requests should be rejected safely without affecting the service.
 
 
+
+## Unit 9 - Milestone 5: Test Results
+
+| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Timeout Error | HTTP 504 with error message | 504 | 504 | 504 | MET |
+| 2. Timeout Response Time | Within 32 seconds | 30.012s | 30.010s | 30.009s | MET |
+| 3. Timeout Logging | Timestamp, status, duration recorded | 3/3 | 3/3 | 3/3 | MET |
+| 4. Normal Submissions | HTTP 200 with scores and label | 200 | 200 | 200 | MET |
+| 5. Invalid Input | HTTP 400 for missing and empty text | 2/2 | 2/2 | 2/2 | MET |
+
+### Sample Output
+
+**Source:** `app.py` — `/submit`
+
+Timeout response:
+```json
+{
+  "error": "Detection timed out"
+}
+```
+HTTP status: 504
+
+Normal submission:
+```json
+{
+  "combined_score": 0.0854,
+  "confidence": 0.0854,
+  "guess": "human",
+  "label": "This text appears more likely to have been written by a person.",
+  "model_score": 0.0854,
+  "style_score": 0.6667
+}
+```
+HTTP status: 200
+
+Invalid input:
+```json
+{
+  "error": "Text is required"
+}
+```
+HTTP status: 400
