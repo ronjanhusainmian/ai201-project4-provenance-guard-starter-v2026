@@ -512,3 +512,9 @@ I will make the existing Flask service reproducible locally, add structured logg
 - Changing the classification thresholds or scoring logic.
 - Adding new API endpoints or detection features.
 
+
+### Unit 9 - Extension Testing
+
+- Normal submission: HTTP 200, with detection scores returned.
+- Simulated timeout: HTTP 504, with a clear error message.
+

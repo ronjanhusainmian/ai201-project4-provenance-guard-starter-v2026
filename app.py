@@ -27,6 +27,8 @@ import detector
 import stylometry
 import scoring
 import uuid
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+
 
 from flask import Flask, jsonify, request
 
@@ -221,12 +223,23 @@ def submit():
     content_id = str(uuid.uuid4())
 
     # Run the first detection signal
+    executor = ThreadPoolExecutor(max_workers=1)
+
     try:
-        model_score = detector.model_signal(text)
+        future = executor.submit(detector.model_signal, text)
+        model_score = future.result(timeout=30)
+
+    except FutureTimeoutError:
+        return jsonify({"error": "Detection timed out"}), 504
+
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
+
     except detector.DetectorUnavailable as exc:
         return jsonify({"error": str(exc)}), 503
+
+    finally:
+        executor.shutdown(wait=False, cancel_futures=True)
 
     style_score = stylometry.style_signal(text)
 
