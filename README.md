@@ -488,3 +488,27 @@ I would prioritize reducing false accusations against human writers, even if tha
 ---
 
 📖 **How to run this project: [RUNNING.md](RUNNING.md)**
+
+
+
+
+## Capstone
+
+### The System
+I am extending my Provenance Guard web service from Units 7–8. The system analyzes submitted text using GPT-2 perplexity and stylometry, combines the scores, and classifies the text as AI, human, or unsure.
+
+### The Shape
+**Shape A — Deploy and Instrument**
+
+I will make the existing Flask service reproducible locally, add structured logging for each request, and measure how long each request takes.
+
+### What's New
+- A `RUNNING.md` file with instructions to start the service.
+- Structured logs containing timestamps, request information, results, and execution time.
+- Measurements of how long text classification takes.
+
+### What's Out of Scope
+- Training or replacing the detection models.
+- Changing the classification thresholds or scoring logic.
+- Adding new API endpoints or detection features.
+
