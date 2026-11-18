@@ -1,0 +1,11 @@
+{"timestamp": "2026-11-18T14:17:38", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 4.4862}
+{"timestamp": "2026-11-18T14:17:42", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0282}
+{"timestamp": "2026-11-18T14:17:45", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0227}
+{"timestamp": "2026-11-18T14:17:47", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0222}
+{"timestamp": "2026-11-18T14:17:48", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0238}
+{"timestamp": "2026-11-18T14:17:49", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0235}
+{"timestamp": "2026-11-18T14:17:51", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0196}
+{"timestamp": "2026-11-18T14:17:52", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0243}
+{"timestamp": "2026-11-18T14:17:54", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0285}
+{"timestamp": "2026-11-18T14:17:55", "endpoint": "/submit", "input": {"text_length": 26}, "output": {"status_code": 200}, "duration_seconds": 0.0219}
+{"timestamp": "2026-11-18T14:18:06", "endpoint": "/submit", "input": {"text_length": 0}, "output": {"status_code": 400}, "duration_seconds": 0.0002}

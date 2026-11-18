@@ -306,3 +306,21 @@ is evidence, and the entries you paste into your README are what unit 8 grades.
 
 **Do not delete and recreate this repository.** You submit the same URL both
 units.
+
+
+## Unit 9 — Local Run Path
+
+**Path:** B — Local with Logs
+
+Start the service from the project directory:
+
+```bash
+source .venv/bin/activate
+python app.py
+```
+
+The service runs at `http://127.0.0.1:5000`.
+
+The system records structured request logs in `logs/unit9_runs.jsonl`, including request duration, response status, and failed requests.
+
+The AI detection model runs locally, so no API key or hosting service is required.

@@ -28,6 +28,9 @@ import stylometry
 import scoring
 import uuid
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+import time
+import json
+from pathlib import Path
 
 
 from flask import Flask, jsonify, request
@@ -36,7 +39,32 @@ import audit
 import config
 
 app = Flask(__name__)
+@app.before_request
+def start_timer():
+    request.start_time = time.perf_counter()
 
+
+@app.after_request
+def log_request(response):
+    duration = round(time.perf_counter() - request.start_time, 4)
+
+    record = {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "endpoint": request.path,
+        "input": {
+            "text_length": len(request.get_json(silent=True).get("text", ""))
+            if isinstance(request.get_json(silent=True), dict) else 0
+        },
+        "output": {"status_code": response.status_code},
+        "duration_seconds": duration
+    }
+
+    Path("logs").mkdir(exist_ok=True)
+
+    with open("logs/unit9_runs.jsonl", "a") as f:
+        f.write(json.dumps(record) + "\n")
+
+    return response
 
 # ── Rate limiting — UNIT 8 ────────────────────────────────────────────────────
 # Off until you turn it on. In unit 8, Milestone 1:
