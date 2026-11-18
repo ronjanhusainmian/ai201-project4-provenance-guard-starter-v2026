@@ -659,3 +659,37 @@ The timeout does not stop the underlying model computation, which may continue r
 
 I stopped after one improvement to keep the extension focused and measure its impact.
 
+
+
+## What It Costs
+
+Provenance Guard runs locally, so there are no API charges. I measured the cost using the time taken to process successful requests, recorded in `logs/unit9_runs.jsonl`.
+
+- **Average time per request:** 0.7342 seconds
+- **Cost for 100 requests per day:** 73.42 seconds
+This measures processing time.
+
+
+
+## What's Still Broken
+
+All five acceptance criteria passed. However, the system still has some limitations.
+
+- **Background processing:** When a request times out, the API returns an error, but the detection model may continue running in the background. I would improve this by stopping or isolating timed-out tasks.
+- **Timeout threshold:** The 32-second response target was too loose after reducing the timeout to 20 seconds. I would tighten the target to 22 seconds.
+- **Why I stopped:** I focused on one improvement and tested it across three trials. Further changes would require additional testing.
+
+
+### How I Used AI
+
+**Moment 1**
+
+- **What I asked for:** I asked AI for help writing Python scripts to test the timeout handling in my Flask API.
+- **What came back:** AI provided examples of how to simulate slow detection and test the API's response.
+- **What I changed:** I adapted the testing approach to my `/submit` endpoint, ran the tests locally, and verified that the API returned HTTP 504 when detection exceeded the timeout.
+
+**Moment 2**
+
+- **What I asked for:** I asked AI for help with Python scripts to analyze structured logs and calculate average request duration.
+- **What came back:** AI provided a script to read the JSONL log file, filter successful requests, and calculate the average processing time.
+- **What I changed:** I ran the script using my actual logs, checked the results, and used the measurements to document the system's cost.
