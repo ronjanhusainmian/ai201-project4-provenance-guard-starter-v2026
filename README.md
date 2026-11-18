@@ -538,3 +538,27 @@ I will make the existing Flask service reproducible locally, add structured logg
 Successful runs: 10
 Average duration: 0.4701 seconds
 
+
+## Unit 9 - Acceptance Criteria
+
+### 1. Timeout Error
+- **Target:** If detection takes longer than 30 seconds, `/submit` returns HTTP 504 with a clear error message in 3/3 trials.
+- **Reason:** Users should receive an error instead of waiting indefinitely.
+
+### 2. Timeout Response Time
+- **Target:** When the detector exceeds the 30-second limit, the API responds within 32 seconds in 3/3 trials.
+- **Reason:** A 2-second margin allows for small processing delays while keeping the timeout predictable.
+
+### 3. Timeout Logging
+- **Target:** Every timed-out request produces a log entry containing the timestamp, HTTP 504 status, and request duration in 3/3 trials.
+- **Reason:** Failed requests need to be recorded so they can be investigated later.
+
+### 4. Normal Submissions
+- **Target:** A normal `/submit` request returns HTTP 200 with a guess, confidence, and both detection scores in 3/3 trials.
+- **Reason:** Adding timeout handling should not break the original detection functionality.
+
+### 5. Invalid Input Handling
+- **Target:** Submissions with missing or empty text return HTTP 400 without crashing the server in 3/3 trials.
+- **Reason:** Invalid requests should be rejected safely without affecting the service.
+
+
