@@ -605,3 +605,57 @@ Invalid input:
 }
 ```
 HTTP status: 400
+
+
+
+## Unit 9 - Milestone 6: Diagnosis and Improvement
+
+### Initial Results
+
+The timeout extension passed the response and timing tests. All three simulated timeouts returned HTTP 504 in approximately 30.01 seconds.
+
+Normal submissions returned HTTP 200, and invalid inputs returned HTTP 400.
+
+### Diagnosis
+
+The extension handles slow detection, but the 30-second timeout is relatively long for someone waiting for a response.
+
+**Stage:** Model execution in the `/submit` endpoint.
+
+**Mechanism:** The API waits up to 30 seconds for `detector.model_signal()` before returning a timeout error.
+
+### Improvement
+
+I will reduce the timeout from 30 seconds to 20 seconds so users receive an error sooner when detection is too slow.
+
+
+
+
+### Before vs. After
+
+**Change:** Reduced the detection timeout from 30 seconds to 20 seconds in `app.py`.
+
+| Criterion | Before | After | Verdict (After) |
+|---|---|---|---|
+| 1. Timeout Error | 3/3 HTTP 504 | 3/3 HTTP 504 | MET |
+| 2. Timeout Response Time | 30.012s, 30.010s, 30.009s | 20.012s, 20.011s, 20.010s | MET |
+| 3. Timeout Logging | 3/3 complete logs | 3/3 complete logs | MET |
+| 4. Normal Submissions | 3/3 HTTP 200 | 3/3 HTTP 200 | MET |
+| 5. Invalid Input | 3/3 missing and empty text rejected | 3/3 missing and empty text rejected | MET |
+
+### Did the Improvement Help?
+
+Yes. The average timeout response time decreased from approximately 30.01 seconds to 20.01 seconds, an improvement of about 10 seconds (33%). All three timeout tests returned HTTP 504 with the correct error message.
+
+Normal submissions still returned HTTP 200 with detection scores, and invalid inputs still returned HTTP 400.
+
+### Tradeoff
+
+The shorter timeout improves response time when detection is slow. However, requests that take between 20 and 30 seconds may now time out even if the model would have successfully completed them.
+
+### What's Still Broken
+
+The timeout does not stop the underlying model computation, which may continue running after the API returns HTTP 504. A future improvement would be to cancel or isolate long-running model tasks so they do not continue consuming resources.
+
+I stopped after one improvement to keep the extension focused and measure its impact.
+

@@ -255,7 +255,7 @@ def submit():
 
     try:
         future = executor.submit(detector.model_signal, text)
-        model_score = future.result(timeout=30)
+        model_score = future.result(timeout=20)
 
     except FutureTimeoutError:
         return jsonify({"error": "Detection timed out"}), 504
